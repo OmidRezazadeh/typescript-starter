@@ -17,7 +17,13 @@ export class UserService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
+ async edit(userId: number, name: string) {
+  return await this.prisma.user.update({
+      where: { id: userId },
+      data: { name },
+    });
 
+  }
   
     async all(filters: FiltersDto) {
       const { userId, email, title, content, createdAt, page = 1, limit = 10 } = filters;
