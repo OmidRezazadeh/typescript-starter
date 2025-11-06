@@ -8,15 +8,19 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pip';
+import type { RegisterDto } from './validate/auth.schema';
+import { registerSchema } from './validate/auth.schema';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
- 
-async login('login'){
-
-}
-
+  @Post('register')
+  async register(
+    @Body(new ZodValidationPipe(registerSchema)) registerDto: RegisterDto,
+  ) {
+    return this.userService.register(registerDto);
+  }
 
   @Post('store')
   async create(
@@ -24,7 +28,7 @@ async login('login'){
   ) {
     return await this.userService.create(data);
   }
- 
+
   @Get('list/:userId')
   async list(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.list(userId);
@@ -33,5 +37,4 @@ async login('login'){
   async all() {
     return this.userService.all();
   }
-
 }
