@@ -9,12 +9,18 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pip';
-import type { RegisterDto } from './validate/auth.schema';
-import { registerSchema } from './validate/auth.schema';
+import type { RegisterDto ,LoginDto } from './validate/auth.schema';
+import { loginSchema, registerSchema } from './validate/auth.schema';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Post('login')
+  async login(
+    @Body(new ZodValidationPipe(loginSchema)) loginDto:LoginDto) {
+           return this.userService.login(loginDto)
+  }
   @Post('register')
   async register(
     @Body(new ZodValidationPipe(registerSchema)) registerDto: RegisterDto,
