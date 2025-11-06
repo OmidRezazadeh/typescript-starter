@@ -4,9 +4,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class PostService {
     constructor(private prisma: PrismaService) {}
-        create(data: { title: string; content: string; authorId: number }) {
+        create(data: { title: string; content: string; }, userId: number) {
             return this.prisma.post.create({
-              data,
+                data: {
+                    title: data.title,
+                    content: data.content,
+                    authorId: userId
+                }
             });
           }
 }
