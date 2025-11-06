@@ -9,13 +9,19 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ZodValidationPipe } from 'src/common/pipes/zod-validation.pip';
-import type { RegisterDto ,LoginDto } from './validate/auth.schema';
+import type { RegisterDto, LoginDto } from './validate/auth.schema';
 import { loginSchema, registerSchema } from './validate/auth.schema';
+import { FilterSchema } from './validate/filters.schema';
+import type { FiltersDto } from './validate/filters.schema';
+
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  @Get('all')
+  async all(@Query(new ZodValidationPipe(FilterSchema)) filterDto: FiltersDto) {
+    return this.userService.all(filterDto);
+  }
   @Post('login')
   async login(
     @Body(new ZodValidationPipe(loginSchema)) loginDto:LoginDto) {
@@ -39,8 +45,6 @@ export class UserController {
   async list(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.list(userId);
   }
-  @Get('all')
-  async all() {
-    return this.userService.all();
-  }
+  
+
 }
