@@ -24,4 +24,5 @@ model Post {
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
+   deletedAt DateTime?  
   }
