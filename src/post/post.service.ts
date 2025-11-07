@@ -24,5 +24,10 @@ export class PostService {
       data: { deletedAt: new Date() },
     });
   }
-  
+  async restore(postId: number) {
+    return this.prisma.post.update({
+      where: { id: postId },
+      data: { deletedAt: null },
+    });
+  }
 }
