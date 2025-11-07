@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 
@@ -13,5 +13,13 @@ constructor(private readonly postService:PostService){}
      const userId =req.user.id 
       return this.postService.create(data,userId);
     }
-    
+    @Get("list")
+    async list(){
+      return this.postService.list()
+    }
+    @Delete('delete/:id')
+    async softDelete(@Param('id') id: number){
+     const postId = Number(id);
+      return this.postService.softDelete(postId)
+    }
 }
