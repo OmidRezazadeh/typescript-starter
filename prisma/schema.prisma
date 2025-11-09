@@ -9,6 +9,7 @@ datasource db {
 }
 
 model User {
+<<<<<<< HEAD
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
@@ -35,3 +36,35 @@ model Post {
   createdAt DateTime  @default(now())
   deletedAt DateTime?
 }
+=======
+  id             BigInt    @id @default(autoincrement())  // _id as UUID
+  active         Boolean   @default(true)
+  role           String    // Consider using an enum if roles are fixed
+  nationalCode   String    @unique @map("national_code")
+  mobile         String    @unique
+  maxCheckout    Int?      @map("max_checkout") // Optional max checkout limit
+  password       String
+  birthdate      DateTime? // Use DateTime for dates
+  profileStatus  String    @default("incomplete") @map("profile_status")
+  accountNo      String?   @map("account_no")
+  address        String?
+  city           String?
+  province       String?   @map("province") // Fixed typo: province → province
+  tell           String?
+  avatar         String?
+  aboutMe        String?   @map("about_me")
+  email          String    @unique
+  myWebsite      String?   @map("my_website")
+  refId          String?   @map("ref_id")
+  reference      String?
+  sms            Boolean   @default(true)
+  checkout       Int       @default(0) // Tracks checkout count?
+  accessPanel    Boolean   @default(false) @map("access_panel")
+  block          Boolean   @default(false)
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  deletedAt      DateTime? @map("deleted_at") // Soft delete
+
+  @@map("users") // Maps to 'users' table in DB
+}
+>>>>>>> 053db6ef6ee7f57d18a380395bef82d24694124d
