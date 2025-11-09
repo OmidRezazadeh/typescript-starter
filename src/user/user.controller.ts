@@ -22,6 +22,13 @@ import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  
+  @Post('register')
+  async register(
+    @Body(new ZodValidationPipe(registerSchema)) registerDto: RegisterDto,
+  ) {
+    return this.userService.register(registerDto);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Put('edit')
@@ -38,12 +45,6 @@ export class UserController {
   @Post('login')
   async login(@Body(new ZodValidationPipe(loginSchema)) loginDto: LoginDto) {
     return this.userService.login(loginDto);
-  }
-  @Post('register')
-  async register(
-    @Body(new ZodValidationPipe(registerSchema)) registerDto: RegisterDto,
-  ) {
-    return this.userService.register(registerDto);
   }
 
   @Get('list/:userId')
