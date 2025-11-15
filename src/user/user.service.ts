@@ -15,8 +15,34 @@ export class UserService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
+  async store() {
+const result = await this.prisma.user.create({
+    data: {
+      email: "dfgdf@gmail.com",
+      name: "flgfdfg;k",
+      password: "sdfmldgmfkdlg",
 
+      profile: {
+        create: {
+          bio: "This is bio",
+          role: 0,
+        },
+      },
+
+      posts: {
+        create: [
+          {
+            content: "gdgdg",
+            title: "dfgvdfgdfg",
+          },
+        ],
+      },
+    },
+  });
+
+  return result;
+  }
   async register(registerDto: RegisterDto) {
     const password = await bcrypt.hash(registerDto.password, 10);
 

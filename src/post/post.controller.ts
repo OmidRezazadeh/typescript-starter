@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
-import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
+
 
 @Controller('post')
 export class PostController {

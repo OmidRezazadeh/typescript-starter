@@ -51,4 +51,8 @@ export class UserController {
   async list(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.list(userId);
   }
+  @Post('create')
+   async createUser() {
+    return await this.userService.store();
+  }
 }
