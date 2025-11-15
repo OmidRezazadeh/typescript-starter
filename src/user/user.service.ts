@@ -17,39 +17,36 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-async register(registerDto: RegisterDto) {
-  const password = await bcrypt.hash(registerDto.password, 10);
+  async register(registerDto: RegisterDto) {
+    const password = await bcrypt.hash(registerDto.password, 10);
 
-  return this.prisma.$transaction(async (tx) => {
+    return this.prisma.$transaction(async (tx) => {
+      const existsUser = await tx.user.findUnique({
+        where: { email: registerDto.email },
+      });
 
-    const existsUser = await tx.user.findUnique({
-      where: { email: registerDto.email },
+      if (existsUser) {
+        throw new BadRequestException('ایمیل وارد شده تکراریست');
+      }
+
+      const user = await tx.user.create({
+        data: {
+          email: registerDto.email,
+          password,
+          name: registerDto.name,
+        },
+      });
+
+      const profile = await tx.profile.create({
+        data: {
+          bio: 'sdfnsdfsdf',
+          userId: user.id,
+        },
+      });
+
+      return { user, profile };
     });
-
-    if (existsUser) {
-      throw new BadRequestException('ایمیل وارد شده تکراریست');
-    }
-
-
-    const user = await tx.user.create({
-      data: {
-        email: registerDto.email,
-        password,
-        name: registerDto.name,
-      },
-    });
-
-    const profile = await tx.profile.create({
-      data: {
-        bio: 'sdfnsdfsdf',
-        userId: user.id, 
-      },
-    });
-
-    return { user, profile };
-  });
-}
-
+  }
 
   async edit(userId: number, name: string) {
     return await this.prisma.user.update({
